@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 import { MsalGuard } from '@azure/msal-angular';
 import { FailedComponent } from './failed/failed.component';
 import { LayoutComponent } from './LayoutComponent/layout/layout.component';
