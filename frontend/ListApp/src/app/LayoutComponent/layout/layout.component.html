@@ -1,0 +1,29 @@
+<main class="main">
+    <div class="content">
+  
+      <div style="width: 100%;">
+        <button (click)="logout()">Logout</button>
+      </div>
+  
+      <div style="width: 100%;">
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Nº Itens</th>
+          </tr>   
+          <tbody>
+            <tr *ngFor="let list of lists; index as idx">
+              <td>{{ list.id }}</td>
+              <td>{{ list.name }}</td>
+              <td>{{ list.type }}</td>
+              <td>{{ list.itemsCount }}</td>
+            </tr>
+          </tbody>      
+        </table>
+      </div>
+      
+  
+    </div>
+  </main>
