@@ -1,0 +1,119 @@
+Claims
+- Claims are simply statements (for example, name, identity, group, page or functionality access), made about users, that are used primarily for authorizing access to claims-based apps. Each statement corresponds to a value that is stored in the claim.
+- Claims-based identity is a means of authenticating an end user, application or device to another system in a way that abstracts the entity's specific information while providing data that authorizes it for appropriate and relevant interactions.
+
+Tenant
+- A tenant is a container/directory for all the configuration elements you might use to build your authentication and authorization service.
+- A tenant is a group of users who share a common access with specific privileges to the software instance
+- Each user is part of a tenant, and their actions within the application can be regulated based on the permissions associated with their tenant.
+
+SAML
+- Security Assertion Markup Language (SAML) is an XML-based protocol for exchanging authentication and authorization data between parties, particularly between an identity provider (IdP) and a service provider (SP). SAML enables single sign-on (SSO), which allows users to authenticate once and access multiple applications without having to re-enter their credentials.
+
+OpenID
+- OpenID is a decentralized authentication protocol that enables users to authenticate using an existing account with an OpenID provider, such as Google or Facebook. OpenID is designed to be easy to use and deploy
+
+OAuth
+- OAuth is an authorization protocol that enables users to grant third-party applications access to their resources, without sharing their credentials. OAuth is commonly used by web applications that integrate with social media platforms, such as Facebook or Twitter, to access user data.
+
+JWT
+- JSON Web Tokens (JWT) is a lightweight token-based authentication and authorization protocol. JWT is used to securely transmit information between parties, particularly between a client and a server. JWT is widely used in web applications, particularly those that use RESTful APIs.
+
+Summary Table:
+Feature			SAML				JWT
+Format			XML				JSON
+Typical Use Case	Enterprise SSO, Web Apps	API Authentication, Mobile
+Complexity		More Complex			Simpler
+Token Size		Larger (XML overhead)		Smaller (JSON-based)
+Security		XML Signatures, HTTPS		JWS/JWE, HTTPS
+Stateless		No				Yes
+Best For		Browser-based SSO		REST APIs, Microservices
+
+
+Statelesse: meaning the server doesn't need to keep track of sessions. All the information needed for authentication is embedded in the token itself.
+
+Azure AD B2C
+- Azure Active Directory Business To Customer
+- Is a customer identity access management (CIAM) solution that allows customers to use their preferred social, enterprise, or local account identities to gain single sign-on access to their applications and APIs.
+
+1. Create an Azure AD Tenant
+
+2. Create user flows (SignIn SignUp, Profile editing, Password reset)
+
+3. Register applications (SPA, APIS, etc...)
+   If we register an api, we should, if necessary, expose this api with scopes
+
+3.1 Define the Application ID URI
+3.2 Create one or more scopes to protect the data and the functionalities of that API
+
+4. Enable authentication in the WEB API
+
+- To authorize access to a web API, only allow and serve requests that include a valid access token that Azure AD B2C issues.
+
+- A Bearer token is a type of token used for authentication and authorization and is used in web applications and APIs to hold user credentials and indicate authorization for requests and access. Generating Bearer tokens based on protocols and specifications such as OAuth and JWT (JSON Web Token).
+
+- Login Attempt -> Azure B2C -> Authenticates Users -> Adquires an access token with scopes (permissions) for the web API -> Passes the access token as a bearer token in the authentication http header
+
+Result: Authorization: Bearer <access token>
+
+- API reads token -> validates token and permissions (scopes) -> reads claims -> Responds to the HTTP request
+
+STEPS to protect the Web API
+
+1. Install the dependencies
+
+  - Microsoft.Identity.Web
+
+2. Init the authentication (program.cs configuration)
+
+3. Add authentication and scope tags to the endpoints (controllers)
+
+4. Configure the web server (http/https)
+
+5. Add the azure b2c configuration to the api settings
+
+
+5. Enable authentication/Authorization in the angular SPA
+
+- With MSAL Angular and the MSAL Browser. MSAL is a Microsoft-provided library that simplifies adding authentication and authorization support to Angular SPAs.
+
+
+6. With custom policies (also known as Identity Experience Framework or IEF policies), you need two applications registered in your Azure AD B2C tenant:
+
+	 . IdentityExperienceFramework
+	 . ProxyIdentityExperienceFramework
+
+- These applications are essential for securely processing authentication requests and handling custom policy execution.
+
+
+7. Policy Keys
+
+- policy keys are used to securely store and manage cryptographic keys, secrets, and certificates that are referenced in custom policies. These keys play a vital role in securing various components of the custom authentication flows, such as JWT signing, encryption, and secure communication with external services.
+
+
+
+8. Custom policies (also known as Identity Experience Framework).
+
+- Custom policies are configuration files that define the behavior of your tenant
+
+
+
+9. Claims Exchange
+
+ - The relying party application, also known as your Application, sends an authentication request to B2C. B2C may send or receive claims from the end-user, social identity provider, multi-factor authentication provider, REST API and with the Directory service (Azure AD).
+- During the policy execution, Azure AD B2C stores the claims in a temporary memory called a “claims bag”. This is stored in real-time to be utilized for any further steps in the policy.
+
+
+10. Technical profile
+
+ - The following will dive into the underlying components of Azure AD B2C, these components are referred to as Technical Profiles which drive the functionality of your Azure AD B2C policy. All interactions with partners to perform claims exchanges are completed via technical profiles. (Rest API, IP, Insights, Self Asserted (user input))
+ - Technical Profiles are like functions. They can:
+
+	. Send claims to the partner - “input claims”
+	. Execute a procedure - E.g. Render a page to collect information from the user
+	. Return claims to Azure AD B2C – “output claims”
+
+- Technical profiles provide a framework with a built-in mechanism to communicate with known Azure AD B2C components, REST APIs and Identity Providers via open standard protocols.
+
+- A self-asserted user flow (or policy) refers to a type of flow that allows users to provide their own input directly into a form during authentication or registration without needing to redirect to another application or service for that input. Essentially, self-asserted flows let users interact with the Azure AD B2C interface to fulfill specific requirements, such as entering their credentials or completing multi-factor authentication.
+
