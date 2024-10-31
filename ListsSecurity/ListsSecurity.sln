@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListsSecurity", "ListsSecurity.csproj", "{CAEC6F93-6F86-4B6F-B1DD-EA45D7D29DCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAEC6F93-6F86-4B6F-B1DD-EA45D7D29DCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAEC6F93-6F86-4B6F-B1DD-EA45D7D29DCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAEC6F93-6F86-4B6F-B1DD-EA45D7D29DCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAEC6F93-6F86-4B6F-B1DD-EA45D7D29DCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20F92660-A957-4093-B02A-1A12616BBB98}
+	EndGlobalSection
+EndGlobal

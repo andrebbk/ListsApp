@@ -1,4 +1,3 @@
-import { List } from './models/List';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ApiService } from './services/api.service';

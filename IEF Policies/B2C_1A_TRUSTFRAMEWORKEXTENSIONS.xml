@@ -1,9 +1,29 @@
-<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" TenantId="andrebbkorg.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://andrebbkorg.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions" TenantObjectId="b215cb02-40d4-4223-b994-1461e86a104b">
+<TrustFrameworkPolicy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06" PolicySchemaVersion="0.3.0.0" 
+TenantId="andrebbkorg.onmicrosoft.com" PolicyId="B2C_1A_TrustFrameworkExtensions" PublicPolicyUri="http://andrebbkorg.onmicrosoft.com/B2C_1A_TrustFrameworkExtensions" TenantObjectId="b215cb02-40d4-4223-b994-1461e86a104b">
   <BasePolicy>
     <TenantId>andrebbkorg.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkLocalization</PolicyId>
   </BasePolicy>
-  <BuildingBlocks></BuildingBlocks>
+  <BuildingBlocks>
+    <ClaimsSchema>
+      <ClaimType Id="client_secret">
+        <DisplayName>Client Secret</DisplayName>
+        <DataType>string</DataType>        
+      </ClaimType>
+      <ClaimType Id="bearerToken">
+        <DisplayName>Bearer Token</DisplayName>
+        <DataType>string</DataType>        
+      </ClaimType>
+      <ClaimType Id="grant_Type">
+        <DisplayName>Grant Type</DisplayName>
+        <DataType>string</DataType>        
+      </ClaimType>
+      <ClaimType Id="scope">
+        <DisplayName>Scope</DisplayName>
+        <DataType>string</DataType>        
+      </ClaimType>
+    </ClaimsSchema>
+  </BuildingBlocks>
   <ClaimsProviders>
     <ClaimsProvider>
       <DisplayName>Local Account SignIn</DisplayName>
@@ -23,23 +43,39 @@
     <ClaimsProvider>
       <DisplayName>Custom REST API</DisplayName>
       <TechnicalProfiles>
-        <TechnicalProfile Id="RestGetUser">
-          <DisplayName>Validate user input data and return loyaltyNumber claim</DisplayName>
+        <TechnicalProfile Id="REST-AcquireAccessToken">
+          <DisplayName></DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">https://3925-2001-8a0-e253-e600-a517-da7a-76c9-6453.ngrok-free.app/api/Claims/GetClaims</Item>
-            <Item Key="AuthenticationType">Basic</Item>
+            <Item Key="ServiceUrl">https://andrebbkorg.b2clogin.com/andrebbkorg.onmicrosoft.com/B2C_1A_SIGNUP_SIGNIN/oauth2/v2.0/token</Item>
+            <Item Key="AuthenticationType">None</Item>
+            <Item Key="SendClaimsIn">Form</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="3e2b9083-ae2d-4893-a45a-14ceba943f3a" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="client_secret" DefaultValue="PxF8Q~Tt1Abkio1BTntdmvaLYVKjKqHg~DWJzap." AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="grant_type" DefaultValue="client_credentials" AlwaysUseDefaultValue="true" />
+            <InputClaim ClaimTypeReferenceId="scope" DefaultValue="https://andrebbkorg.onmicrosoft.com/78fd6fee-46d4-42b2-ba82-fd85cac4f949/.default" AlwaysUseDefaultValue="true" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="bearerToken" PartnerClaimType="access_token" />
+          </OutputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>        
+        <TechnicalProfile Id="RestGetUser">
+          <DisplayName>Validate user input data and return claims</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">https://fb52-2001-8a0-e253-e600-2d94-bedf-1efe-3f8.ngrok-free.app/api/Claims/GetClaims</Item>
             <Item Key="SendClaimsIn">Body</Item>
+            <Item Key="AuthenticationType">Bearer</Item>
+            <Item Key="UseClaimAsBearerToken">bearerToken</Item>
             <Item Key="AllowInsecureAuthInProduction">false</Item>
           </Metadata>
-          <CryptographicKeys>
-            <Key Id="BasicAuthenticationUsername" StorageReferenceId="B2C_1A_B2cRestClientId" />
-            <Key Id="BasicAuthenticationPassword" StorageReferenceId="B2C_1A_B2cRestClientSecret" />
-          </CryptographicKeys>
           <InputClaims>
+            <InputClaim ClaimTypeReferenceId="bearerToken"/>
             <InputClaim ClaimTypeReferenceId="signInNames.emailAddress" PartnerClaimType="email" />
             <InputClaim ClaimTypeReferenceId="objectId" />
-            <InputClaim ClaimTypeReferenceId="scope" PartnerClaimType="scope" />
           </InputClaims>
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="userId" />
@@ -81,10 +117,15 @@
         </OrchestrationStep>
         <OrchestrationStep Order="4" Type="ClaimsExchange">
           <ClaimsExchanges>
+            <ClaimsExchange Id="REST-AcquireAccessTokens" TechnicalProfileReferenceId="REST-AcquireAccessToken" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="ClaimsExchange">
+          <ClaimsExchanges>
             <ClaimsExchange Id="AddUserClaims" TechnicalProfileReferenceId="RestGetUser" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="6" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>

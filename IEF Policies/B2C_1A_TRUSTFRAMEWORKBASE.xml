@@ -267,7 +267,7 @@
         <DisplayName>hasAccess</DisplayName>
         <DataType>boolean</DataType>
         <AdminHelpText>User has access to the app core</AdminHelpText>
-      </ClaimType>
+      </ClaimType>  
     </ClaimsSchema>
     <ClaimsTransformations>
       <ClaimsTransformation Id="CreateOtherMailsFromEmail" TransformationMethod="AddItemToStringCollection">
